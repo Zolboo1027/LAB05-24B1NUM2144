@@ -21,16 +21,29 @@ int nereer(const Student *a, const Student *b)
 */
 int nasaar(const Student *a, const Student *b)
 {
-        /* функцийг гүйцээ */
-}
+	if(a->age < b->age){
+		return 1;
+	}
+	if(a->age > b->age){
+		return -1;
+	}
+	return 0;
 
+}
+	
 /*
   a, b хаяганд хадгалагдсан сурагчдыг голчоор  нь жиших функц.
   a->gpa, b->gpa-ээс их бол -1, тэнцүү бол 0, бага бол 1-ийг буцаана.  
 */
 int golchoor(const Student *a, const Student *b)
 {
-        /* функцийг гүйцээ */
+        if(a->gpa > b->gpa){
+			return -1;
+		}
+		if(a->gpa < b->gpa){
+			return 1;
+		}
+		return 0;
 	
 }
 
@@ -45,7 +58,20 @@ void insertion_sort(Student a[],
                     int lo, int hi,
                     int (*less)(const Student *, const Student *))
 {
-        /* функцийг гүйцээ */	
+        for (int i = lo + 1; i <= hi; i++) {
+        Student current = a[i];
+        int j;
+
+        for (j = i - 1; j >= lo; j--) {
+            if (less(&current, &a[j]) > 0) {
+                a[j + 1] = a[j];
+            } else {
+                break;
+            }
+        }
+
+        a[j + 1] = current;
+    }
 }
 
 /*
@@ -62,7 +88,29 @@ void merge(Student a[],
            int hi,
            int (*less)(const Student *, const Student *))
 {
-        /* функцийг гүйцээ */
+        for (int k = lo; k <= hi; k++) {
+        aux[k] = a[k];
+    }
+
+    int i = lo;
+    int j = mid + 1;
+
+    for (int k = lo; k <= hi; k++) {
+        if (i > mid) {
+            a[k] = aux[j];
+            j++;
+        } else if (j > hi) {
+            a[k] = aux[i];
+            i++;
+        } else if (less(&aux[j], &aux[i]) > 0) {
+            a[k] = aux[j];
+            j++;
+        } else {
+            /* Тэнцүү бол зүүн талын элементийг эхэлж авна. */
+            a[k] = aux[i];
+            i++;
+        }
+    }
 }
 
 
@@ -78,5 +126,23 @@ void mergesort(Student a[],
                int hi,
                int (*less)(const Student *, const Student *))
 {
-        /* функцийг гүйцээ */        
+        if (lo >= hi) {
+        return;
+    }
+
+    if (hi - lo <= CUTOFF) {
+        insertion_sort(a, lo, hi, less);
+        return;
+    }
+
+    int mid = lo + (hi - lo) / 2;
+
+    mergesort(a, aux, lo, mid, less);
+    mergesort(a, aux, mid + 1, hi, less);
+
+    if (less(&a[mid + 1], &a[mid]) <= 0) {
+        return;
+    }
+
+    merge(a, aux, lo, mid, hi, less); 
 }
