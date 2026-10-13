@@ -106,7 +106,7 @@ void merge(Student a[],
             a[k] = aux[j];
             j++;
         } else {
-            /* Тэнцүү бол зүүн талын элементийг эхэлж авна. */
+            /* tentsuu bol zuun taliin elementiig ehelj avna */
             a[k] = aux[i];
             i++;
         }
